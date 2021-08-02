@@ -21,17 +21,22 @@ function onSocketClose() {
   console.log("Disconnected from the Browser ❌");
 }
 
-function onSocketMessage(message) {
-  console.log(message.toString("utf8"));
-}
+// function onSocketMessage(message) {
+//   console.log(message.toString("utf8"));
+// }
+
+const sockets = [];
 
 wss.on("connection", (socket) => {
+  sockets.push(socket);
   console.log("Connected to Browser!");
 
   // Browser 닫으면 close
   socket.on("close", onSocketClose); 
 
-  socket.on("message", onSocketMessage);
+  socket.on("message", (message) => {
+    sockets.forEach(aSocket => aSocket.send(message.toString("utf8")));
+  });
 
   socket.send("hello!!!");
 });
