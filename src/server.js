@@ -17,15 +17,21 @@ const handleListen = () => console.log(`Listen on http:localhost:3000`);
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server }); // http 서버 위에 websockt 서버 구현
 
+function onSocketClose() {
+  console.log("Disconnected from the Browser ❌");
+}
+
+function onSocketMessage(message) {
+  console.log(message.toString("utf8"));
+}
+
 wss.on("connection", (socket) => {
   console.log("Connected to Browser!");
 
   // Browser 닫으면 close
-  socket.on("close", () => console.log("Disconnected from the Browser")); 
+  socket.on("close", onSocketClose); 
 
-  socket.on("message", message => {
-    console.log(message.toString("utf8"));
-  });
+  socket.on("message", onSocketMessage);
 
   socket.send("hello!!!");
 });
