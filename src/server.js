@@ -12,5 +12,15 @@ app.get("/*", (req, res) => res.redirect("/"));
 
 const handleListen = () => console.log(`Listen on http:localhost:3000`);
 
+// 2가지 프로토콜(Http, Websocket)을 같은 포트에서 실행(연결)시키기 위해 아래와 같이 구현.
+// 둘을 별개로 구현하는 것도 가능하다.
 const server = http.createServer(app);
-const wss = new WebSocket.Server({server});
+const wss = new WebSocket.Server({ server }); // http 서버 위에 websockt 서버 구현
+
+function handleConnection(socket) {
+  console.log(socket);
+}
+
+wss.on("connection", handleConnection)
+
+server.listen(3000, handleListen);
