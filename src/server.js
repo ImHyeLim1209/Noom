@@ -27,7 +27,13 @@ const wsServer = SocketIO(httpServer);
 
 
 wsServer.on("connection", (socket) => {
-  console.log(socket); 
+  // frontend로 부터 함수도 전달받을 수 있다.
+  socket.on("enter_room", (roomName, done) => {
+    console.log(roomName);
+    setTimeout(() => {
+      done("hello from the backend");
+    }, 15000);
+  });
 });
 
 const handleListen = () => console.log(`Listening on http://localhost:3000`);
