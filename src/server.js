@@ -27,12 +27,15 @@ const wsServer = SocketIO(httpServer);
 
 
 wsServer.on("connection", (socket) => {
+
+  // onAny: event를 emit할 때 실행될 리스너 추가
+  socket.onAny((event) => {
+    console.log(`Socket Event: ${event}`);
+  });
   // frontend로 부터 함수도 전달받을 수 있다.
   socket.on("enter_room", (roomName, done) => {
-    console.log(roomName);
-    setTimeout(() => {
-      done("hello from the backend");
-    }, 15000);
+    socket.join(roomName);
+    done();
   });
 });
 
